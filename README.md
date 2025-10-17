@@ -172,3 +172,104 @@ ArrayList  LinkedList  Vector  PriorityQueue     HashSet  SortedSet
 | **Works With**        | Functional interfaces (SAM interfaces)                     | `Runnable`, `Callable`, `Function`, etc. |
 | **Syntax**            | `(parameters) -> expression` or `(parameters) -> { body }` | `(a, b) -> a + b`                        |
 | **Main Use**          | Pass code as data, simplify callbacks, use with Streams    | `list.forEach(x -> ...)`                 |
+
+
+What is a Stream in Java?
+
+    A Stream is a sequence of elements that can be processed in a functional way — like filtering, transforming, or collecting data — without modifying the original collection.
+
+    -> A Stream doesn’t store data.
+
+    -> It pulls data from a source (like a List, array, or file).
+
+    -> You apply a pipeline of operations (filter, map, sort, reduce, etc.).
+
+    -> The Stream runs when you call a terminal operation (like collect() or forEach()).
+
+Stream Pipeline Structure
+
+    Source → Intermediate Operations → Terminal Operation
+
+    List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6);
+
+    int sum = numbers.stream()                // 1️⃣ Source
+                    .filter(n -> n % 2 == 0) // 2️⃣ Intermediate (keep evens)
+                    .mapToInt(n -> n * n)    // 3️⃣ Intermediate (square each)
+                    .sum();                  // 4️⃣ Terminal (sum of all)
+                    
+    System.out.println(sum); // Output: 56
+
+Intermediate Operations (Transform or Filter)
+
+| Operation           | Description                         | Example                      |
+| ------------------- | ----------------------------------- | ---------------------------- |
+| `filter(Predicate)` | Keeps elements that match condition | `.filter(n -> n > 5)`        |
+| `map(Function)`     | Transforms elements                 | `.map(n -> n * 2)`           |
+| `sorted()`          | Sorts stream elements               | `.sorted()`                  |
+| `distinct()`        | Removes duplicates                  | `.distinct()`                |
+| `limit(n)`          | Takes first `n` elements            | `.limit(3)`                  |
+| `skip(n)`           | Skips first `n` elements            | `.skip(2)`                   |
+| `peek()`            | Debug/inspect without consuming     | `.peek(System.out::println)` |
+
+Terminal Operations (Produce Result)
+
+| Operation                                   | Description                      | Example                         |
+| ------------------------------------------- | -------------------------------- | ------------------------------- |
+| `forEach()`                                 | Performs action for each element | `.forEach(System.out::println)` |
+| `collect()`                                 | Converts Stream → List, Set, Map | `.collect(Collectors.toList())` |
+| `count()`                                   | Returns number of elements       | `.count()`                      |
+| `findFirst()` / `findAny()`                 | Returns optional element         | `.findFirst().get()`            |
+| `reduce()`                                  | Combines elements into one       | `.reduce(0, Integer::sum)`      |
+| `anyMatch()` / `allMatch()` / `noneMatch()` | Checks conditions                | `.anyMatch(x -> x > 10)`        |
+
+
+| Concept              | Description                                                 | Example                              |
+| -------------------- | ----------------------------------------------------------- | ------------------------------------ |
+| **Stream**           | Sequence of elements supporting functional-style operations | `list.stream()`                      |
+| **Intermediate Ops** | Transform/filter data (lazy)                                | `filter()`, `map()`, `sorted()`      |
+| **Terminal Ops**     | Produce final result (trigger execution)                    | `collect()`, `forEach()`, `reduce()` |
+| **Lazy Evaluation**  | Stream executes only when terminal op runs                  | —                                    |
+| **Immutable Source** | Doesn’t change the original collection                      | —                                    |
+| **Parallel Stream**  | Multi-threaded processing                                   | `parallelStream()`                   |
+
+
+# ParallelStreamExample.java
+
+| Concept               | Description                                 | Example                     |
+| --------------------- | ------------------------------------------- | --------------------------- |
+| **Sequential Stream** | Single-threaded stream                      | `list.stream()`             |
+| **Parallel Stream**   | Multi-threaded stream (auto-split workload) | `list.parallelStream()`     |
+| **Internal Threads**  | Uses ForkJoinPool (managed threads)         | No need to create manually  |
+| **Thread Safety**     | Only use when elements are independent      | Don’t modify shared objects |
+| **Ordering**          | Use `forEachOrdered()` if order matters     | —                           |
+
+| ✅ Good Use Cases                                       | ❌ Avoid When                                    |
+| ------------------------------------------------------ | ----------------------------------------------- |
+| Large data sets (10,000+ elements)                     | Very small data sets                            |
+| CPU-intensive tasks (math, filtering, transformations) | IO-bound tasks (like reading files or DB calls) |
+| Independent operations (no shared data or state)       | Shared mutable data (risk of race conditions)   |
+
+
+
+# Lazy vs Eager
+Lazy Evaluation means Java doesn’t execute stream operations immediately when you write them.
+Instead, it builds a pipeline of operations first,
+
+Eager Evaluation means operations are executed immediately,
+as soon as they are encountered — not delayed or deferred.
+
+Intermediate operations (like filter(), map(), sorted()) → lazy
+
+Terminal operations (like collect(), forEach(), count()) → eager
+
+
+
+| Type             | Examples                                                       | Execution                           | Returns           |
+| ---------------- | -------------------------------------------------------------- | ----------------------------------- | ----------------- |
+| **Intermediate** | `filter()`, `map()`, `sorted()`, `distinct()`                  | **Lazy** (no execution yet)         | Stream            |
+| **Terminal**     | `collect()`, `forEach()`, `count()`, `reduce()`, `findFirst()` | **Eager** (triggers full execution) | Non-Stream result |
+
+Source → filter() → map() → sorted() → collect()
+           ↑         ↑        ↑         ↑
+        (lazy)    (lazy)   (lazy)   (executes everything)
+
