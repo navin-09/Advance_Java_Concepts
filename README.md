@@ -273,3 +273,12 @@ Source → filter() → map() → sorted() → collect()
            ↑         ↑        ↑         ↑
         (lazy)    (lazy)   (lazy)   (executes everything)
 
+# Reduce function
+
+| Term            | Description                                   | Example                         |
+| --------------- | --------------------------------------------- | ------------------------------- |
+| **Identity**    | Initial value for accumulator                 | `0` in `reduce(0, (a,b)->a+b)`  |
+| **Accumulator** | Combines two elements                         | `(a,b)->a+b`                    |
+| **Combiner**    | Merges partial results (for parallel streams) | `(p1,p2)->p1+p2`                |
+| **Result**      | Final single output value                     | `int`, `String`, `Object`, etc. |
+
