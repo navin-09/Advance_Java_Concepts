@@ -146,3 +146,29 @@ ArrayList  LinkedList  Vector  PriorityQueue     HashSet  SortedSet
 | **Lambda Expression**            | Shorthand for implementing a functional interface | `() -> System.out.println("Run")`                       |
 | **@FunctionalInterface**         | Annotation to enforce SAM rule                    | `@FunctionalInterface interface MyFunc { void run(); }` |
 | **Package**                      | Most built-ins are in `java.util.function`        | `Predicate`, `Function`, etc.                           |
+
+# What is a Lambda Function?
+    A lambda function (or lambda expression) is a short block of code that takes parameters and returns a value — without needing a name or a full class.
+
+
+| Syntax                                          | Meaning                        |
+| ----------------------------------------------- | ------------------------------ |
+| `(a, b) -> a + b`                               | Lambda that adds two numbers   |
+| `(name) -> System.out.println("Hello " + name)` | Lambda that prints             |
+| `() -> 42`                                      | Lambda that returns a constant |
+| `(x) -> { int y = x * 2; return y; }`           | Multi-statement lambda body    |
+
+| Benefit                              | Description                                        |
+| ------------------------------------ | -------------------------------------------------- |
+| ✅ **Concise**                        | No boilerplate (no class or method names)          |
+| ⚙️ **Readable**                      | Focus on *what* you do, not *how*                  |
+| 💡 **Functional Programming**        | Treat code as data — pass behavior around          |
+| 🚀 **Used in Streams & Collections** | `filter()`, `map()`, `forEach()`, etc.             |
+| 🔒 **Thread-friendly**               | Works seamlessly with `Runnable`, `Callable`, etc. |
+
+| Concept               | Description                                                | Example                                  |
+| --------------------- | ---------------------------------------------------------- | ---------------------------------------- |
+| **Lambda Expression** | Shorthand for anonymous function                           | `(x, y) -> x + y`                        |
+| **Works With**        | Functional interfaces (SAM interfaces)                     | `Runnable`, `Callable`, `Function`, etc. |
+| **Syntax**            | `(parameters) -> expression` or `(parameters) -> { body }` | `(a, b) -> a + b`                        |
+| **Main Use**          | Pass code as data, simplify callbacks, use with Streams    | `list.forEach(x -> ...)`                 |
