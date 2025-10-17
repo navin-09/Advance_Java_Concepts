@@ -98,3 +98,51 @@ ArrayList  LinkedList  Vector  PriorityQueue     HashSet  SortedSet
 # TreeMap — Sorted by Key
     ✅ Sorted automatically by key.
     ⚠️ Slightly slower than HashMap.
+
+
+# What is a Functional Interface?
+    A Functional Interface is an interface that has exactly one abstract method.
+
+    @FunctionalInterface
+    interface Greeting {
+        void sayHello(String name);
+    }
+
+# What is SAM (Single Abstract Method)?
+    SAM is just a technical term meaning “an interface with one abstract method.”
+    Every Functional Interface = SAM Interface ✅
+
+# Why Functional Interfaces Exist
+    Before Java 8, you’d write anonymous classes like this:
+
+    Runnable r = new Runnable() {
+    public void run() {
+        System.out.println("Running...");
+        }
+    };
+
+    After Java 8, using functional interfaces, you can replace that with a lambda:
+
+    Runnable r = () -> System.out.println("Running...");
+
+# Built-in Functional Interfaces (from java.util.function)
+
+| Interface             | Method                   | Purpose                          | Example                            |
+| --------------------- | ------------------------ | -------------------------------- | ---------------------------------- |
+| `Runnable`            | `void run()`             | Represents a task                | `new Thread(() -> …)`              |
+| `Callable<V>`         | `V call()`               | Task that returns value          | Used with ExecutorService          |
+| `Supplier<T>`         | `T get()`                | Supplies a value (no input)      | e.g., `() -> 42`                   |
+| `Consumer<T>`         | `void accept(T t)`       | Consumes a value (no return)     | e.g., `x -> System.out.println(x)` |
+| `Function<T, R>`      | `R apply(T t)`           | Maps one type to another         | e.g., `x -> x * 2`                 |
+| `Predicate<T>`        | `boolean test(T t)`      | Tests a condition                | e.g., `x -> x > 10`                |
+| `BiConsumer<T, U>`    | `void accept(T t, U u)`  | Takes 2 arguments                | e.g., `(a,b) -> …`                 |
+| `BiFunction<T, U, R>` | `R apply(T t, U u)`      | Takes 2 inputs, returns 1 output | e.g., `(a,b)->a+b`                 |
+| `BiPredicate<T, U>`   | `boolean test(T t, U u)` | Takes 2 inputs, returns boolean  | e.g., `(a,b)->a>b`                 |
+
+| Concept                          | Description                                       | Example                                                 |
+| -------------------------------- | ------------------------------------------------- | ------------------------------------------------------- |
+| **Functional Interface**         | Interface with exactly one abstract method        | `Runnable`, `Callable`, `Supplier`, etc.                |
+| **SAM (Single Abstract Method)** | A property of all functional interfaces           | `void run()` in `Runnable`                              |
+| **Lambda Expression**            | Shorthand for implementing a functional interface | `() -> System.out.println("Run")`                       |
+| **@FunctionalInterface**         | Annotation to enforce SAM rule                    | `@FunctionalInterface interface MyFunc { void run(); }` |
+| **Package**                      | Most built-ins are in `java.util.function`        | `Predicate`, `Function`, etc.                           |
