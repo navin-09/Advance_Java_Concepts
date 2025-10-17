@@ -282,3 +282,38 @@ Source → filter() → map() → sorted() → collect()
 | **Combiner**    | Merges partial results (for parallel streams) | `(p1,p2)->p1+p2`                |
 | **Result**      | Final single output value                     | `int`, `String`, `Object`, etc. |
 
+
+# Exception
+# What is an Exception?
+    An Exception is an event that disrupts the normal flow of your program.
+
+# Exception Hierarchy
+
+                Throwable
+                ├──────────────┐
+                │              │
+           Exception         Error
+           ├────────────┐
+           │            │
+ CheckedException   RuntimeException
+                      ├────────────┬────────────┬────────────┐
+                      │            │            │            │
+                NullPointer   Arithmetic   ArrayIndex   IllegalArgument
+
+# Two Main Types of Exceptions
+
+| Type          | Description               | Example                                                | Requires `try-catch`? |
+| ------------- | ------------------------- | ------------------------------------------------------ | --------------------- |
+| **Checked**   | Checked *at compile time* | `IOException`, `SQLException`, `FileNotFoundException` | ✅ Yes                 |
+| **Unchecked** | Checked *at runtime*      | `NullPointerException`, `ArithmeticException`          | ❌ No (optional)       |
+
+
+| Keyword       | Meaning                         | Example                                       |
+| ------------- | ------------------------------- | --------------------------------------------- |
+| `try`         | Code that might throw exception | `try { ... }`                                 |
+| `catch`       | Handles the exception           | `catch (Exception e)`                         |
+| `finally`     | Always runs (even if exception) | `finally { closeFile(); }`                    |
+| `throw`       | Manually throw exception        | `throw new Exception("Error");`               |
+| `throws`      | Declare possible exceptions     | `void m() throws IOException`                 |
+| **Checked**   | Compile-time                    | `IOException`, `SQLException`                 |
+| **Unchecked** | Runtime                         | `NullPointerException`, `ArithmeticException` |
