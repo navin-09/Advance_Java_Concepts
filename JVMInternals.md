@@ -63,6 +63,23 @@ Source Code → javac → Bytecode (.class) → JVM → JIT → Native CPU instr
 
             Byte streams → InputStream, OutputStream (for binary data)
 
+# FileReader and FileWriter
+
+    It reads the contents of a text file, one character (or small block) at a time.
+
+    It decodes bytes → characters using your platform’s default charset (e.g., UTF-8).
+
+    It  ’s not buffered, meaning it interacts with the disk directly — so slower for big files.
+
+# BufferedReader & BufferedWriter
+    They wrap around FileReader and FileWriter to improve performance by using an in-memory buffer.
+
+        This means:
+
+            Instead of reading/writing one character at a time,
+
+            They read/write chunks (buffers) at once.
+
 
 # Serialization
     Serialization = Converting an object into a byte stream (to save or send).
@@ -116,3 +133,41 @@ Source Code → javac → Bytecode (.class) → JVM → JIT → Native CPU instr
 | **transient keyword**                        | Skip fields during serialization              | Hide passwords or temporary fields  |
 | **NIO (`Files`, `Paths`)**                   | Modern, efficient file API                    | Production-ready apps               |
 | **Java 11 `readString()` / `writeString()`** | Simplified read/write methods                 | Quick file access                   |
+
+
+| Task              | Recommended Classes                         |
+| ----------------- | ------------------------------------------- |
+| Read text file    | `BufferedReader` + `FileReader`             |
+| Write text file   | `BufferedWriter` + `FileWriter`             |
+| Read binary file  | `BufferedInputStream` + `FileInputStream`   |
+| Write binary file | `BufferedOutputStream` + `FileOutputStream` |
+
+How Buffering Works Internally:
+
+Let’s say your file has 1000 characters.
+
+| Without Buffer                                | With Buffer                                     |
+| --------------------------------------------- | ----------------------------------------------- |
+| Reads 1 char → disk → memory → 999 more reads | Reads 1 chunk (e.g., 256 chars) → memory buffer |
+| 1000 disk operations                          | ~4 disk operations                              |
+| Much slower                                   | Much faster                                     |
+
+
+# hashmap internals
+
+ ┌──────────────────────────────────────────┐
+ │              HashMap<K,V>                │
+ │ ┌──────────┐ ┌──────────┐ ┌──────────┐  │
+ │ │Bucket[0] │ │Bucket[1] │ │Bucket[2] │  │
+ │ │ null     │ │ [A,10]─┬▶│ [C,30]    │  │
+ │ │          │ │ [B,20]─┘ │            │  │
+ │ └──────────┘ └──────────┘ └──────────┘  │
+ │          ↓ hash(key) % n                │
+ └──────────────────────────────────────────┘
+
+“HashMap uses an array of buckets.
+Each key’s hash determines its bucket index ((n-1)&hash).
+Collisions are handled by chaining (linked list → tree after threshold 8).
+When size exceeds 0.75 × capacity, it resizes (rehash).
+Lookup and insert are O(1) average, O(log n) worst (after Java 8).
+Not thread-safe — use ConcurrentHashMap for concurrent use.”
